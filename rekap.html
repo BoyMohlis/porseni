@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Rekap JSON PORSENI MTs</title><link rel="stylesheet" href="style.css"><style>
+body{background:#f4f7f4}.admin-head{background:#084b32;color:#fff;padding:28px 5%}.admin-head a{color:#d7e9dd;font-size:12px}.admin-head h1{font-size:32px;margin:12px 0 4px}.admin-head p{font-size:12px;color:#cde0d3;margin:0}.admin-wrap{width:min(1200px,94%);margin:25px auto 60px}.admin-tools{background:white;border:1px solid #e3eae5;border-radius:17px;padding:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}.admin-tools input,.admin-tools select{padding:11px;border:1px solid #dce5dd;border-radius:10px;min-width:180px}.admin-tools .btn{font-size:12px}.table-wrap{overflow:auto;background:white;border:1px solid #e3eae5;border-radius:16px;margin-top:18px}table{border-collapse:collapse;width:100%;min-width:950px;font-size:12px}th,td{text-align:left;padding:13px 14px;border-bottom:1px solid #edf1ed;vertical-align:top}th{background:#eef6ef;color:#2a5038;font-size:11px}td small{color:#6b7b70}.badge{background:#fff1cf;color:#785b14;padding:4px 8px;border-radius:20px;font-size:10px;font-weight:bold}.summary{display:flex;gap:12px;margin:18px 0}.summary div{background:white;border:1px solid #e3eae5;border-radius:13px;padding:15px 20px;min-width:140px}.summary strong{display:block;color:#126b45;font-size:23px}.summary span{font-size:11px;color:#66766d}.hint{font-size:12px;color:#66766d;line-height:1.7;margin:14px 0}.empty{padding:40px;text-align:center;color:#66766d}.actions button{border:0;border-radius:8px;padding:7px 9px;background:#e8f5ed;color:#126b45;cursor:pointer;margin:2px}.actions .del{background:#ffebe8;color:#a33629}.file-label{display:inline-flex;align-items:center;gap:7px;border-radius:12px;padding:13px 16px;background:#e8f5ed;color:#126b45;font-size:12px;font-weight:800;cursor:pointer}.file-label input{display:none}
+</style></head><body>
+<header class="admin-head"><a href="index.html">← Kembali ke website PORSENI</a><h1>Rekap Pendaftaran JSON</h1><p>Alat bantu panitia untuk membaca berkas JSON yang dikumpulkan dari madrasah. Mendukung format v1, v2, dan v3 (multi-lomba).</p></header>
+<main class="admin-wrap">
+  <div class="notice"><b>Penting:</b> alat ini berjalan di browser dan tidak mengunggah berkas ke server. Pilih satu atau beberapa file JSON pendaftaran dari komputer untuk membuat rekap sementara. JSON versi baru (v3) bisa memuat lebih dari satu cabang lomba per file; setiap lomba akan ditampilkan sebagai baris tersendiri.</div>
+  <div class="admin-tools">
+    <label class="file-label">＋ Pilih file JSON <input id="fileInput" type="file" accept=".json,application/json" multiple></label>
+    <input id="search" type="search" placeholder="Cari peserta / madrasah…">
+    <select id="filter"><option value="">Semua lomba</option></select>
+    <button id="exportAll" class="btn btn-green">Ekspor rekap JSON</button>
+    <button id="exportCSV" class="btn btn-muted">Ekspor CSV</button>
+    <button id="clear" class="btn btn-muted">Kosongkan rekap</button>
+  </div>
+  <div class="summary"><div><strong id="countFiles">0</strong><span>File dibaca</span></div><div><strong id="countRegs">0</strong><span>Pendaftaran</span></div><div><strong id="countPeople">0</strong><span>Peserta</span></div></div>
+  <p id="status" class="hint">Belum ada file dipilih. Pilih file .json hasil formulir pendaftaran.</p>
+  <div class="table-wrap"><table><thead><tr><th>No.</th><th>ID Pendaftaran</th><th>Madrasah</th><th>Lomba</th><th>Kategori</th><th>Nama Peserta</th><th>Pembina / Kontak</th><th>Status</th><th>Dokumen</th><th>Aksi</th></tr></thead><tbody id="rows"><tr><td colspan="10" class="empty">Data pendaftaran akan muncul di sini.</td></tr></tbody></table></div>
+  <p class="hint">Tips: simpan file asli yang diterima panitia sebagai cadangan. Rekap di halaman ini hanya tersimpan selama halaman terbuka; ekspor JSON/CSV untuk menyimpan hasil gabungan.</p>
+</main>
+<script>
+const $ = s => document.querySelector(s);
+let records = [], fileNames = [];
+
+function esc(v=""){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function people(r){return Array.isArray(r.peserta)?r.peserta.map(p=>p.nama).join(", "):"";}
+
+/* ====== NORMALISASI: v1/v2 tetap 1 record, v3 dipecah per lomba ====== */
+function expandRecords(data, sourceFile){
+  const base = {
+    id_utama: data.id_pendaftaran,
+    tanggal_daftar: data.tanggal_daftar,
+    madrasah: data.madrasah,
+    pembina: data.pembina,
+    catatan: data.catatan,
+    status: data.status,
+    _original: data,
+    _file: sourceFile
+  };
+  if (data.format === "porseni-mts-registration-v3"){
+    const list = Array.isArray(data.pendaftaran_lomba) ? data.pendaftaran_lomba : [];
+    return list.map((entry, i) => ({
+      ...base,
+      id_pendaftaran: (data.id_pendaftaran || "") + "-L" + (i+1),
+      lomba: entry.lomba || {},
+      peserta: Array.isArray(entry.peserta) ? entry.peserta : []
+    }));
+  }
+  return [{
+    ...base,
+    id_pendaftaran: data.id_pendaftaran,
+    lomba: data.lomba || {},
+    peserta: Array.isArray(data.peserta) ? data.peserta : []
+  }];
+}
+
+function render(){
+  const term = $("#search").value.toLowerCase().trim();
+  const filter = $("#filter").value;
+  const list = records
+    .map((r,i) => ({...r, _idx:i}))
+    .filter(r => !filter || r.lomba?.nama === filter)
+    .filter(r => JSON.stringify([
+      r.id_pendaftaran, r.madrasah?.nama, r.lomba?.nama, people(r), r.pembina?.nama
+    ]).toLowerCase().includes(term));
+
+  $("#countFiles").textContent = fileNames.length;
+  $("#countRegs").textContent = records.length;
+  $("#countPeople").textContent = records.reduce((n,r) => n + (r.peserta?.length || 0), 0);
+
+  const opts = [...new Set(records.map(r => r.lomba?.nama).filter(Boolean))].sort();
+  const old = $("#filter").value;
+  $("#filter").innerHTML = '<option value="">Semua lomba</option>' +
+    opts.map(x => `<option>${esc(x)}</option>`).join("");
+  if (opts.includes(old)) $("#filter").value = old;
+
+  $("#rows").innerHTML = list.length ? list.map((r,n) => `
+    <tr>
+      <td>${n+1}</td>
+      <td><b>${esc(r.id_pendaftaran || "-")}</b><br><small>${esc(r.tanggal_daftar || "")}</small></td>
+      <td>${esc(r.madrasah?.nama || "-")}<br><small>${esc(r.madrasah?.kabupaten_kota || "")}</small></td>
+      <td>${esc(r.lomba?.nama || "-")}<br><small>${esc(r.lomba?.jenis || "")}</small></td>
+      <td>${esc(r.lomba?.kategori_peserta || "-")}</td>
+      <td>${(r.peserta || []).map(p => esc(p.nama) + " (" + esc(p.kelas) + ")").join("<br>")}</td>
+      <td>${esc(r.pembina?.nama || "-")}<br><small>${esc(r.pembina?.whatsapp || "")}</small></td>
+      <td><span class="badge">${esc(r.status || "menunggu")}</span></td>
+      <td>${(r.peserta || []).some(p => p.dokumen) ? `<button data-docs="${r._idx}">Unduh dokumen</button>` : "<small>Tidak ada</small>"}</td>
+      <td class="actions">
+        <button data-view="${r._idx}">Lihat JSON</button>
+        <button class="del" data-del="${r._idx}">Hapus</button>
+      </td>
+    </tr>`).join("") : '<tr><td colspan="10" class="empty">Tidak ada data yang cocok.</td></tr>';
+}
+
+$("#fileInput").addEventListener("change", async e => {
+  let ok = 0, errs = [];
+  for (const file of [...e.target.files]){
+    try {
+      const data = JSON.parse(await file.text());
+      const validFormats = ["porseni-mts-registration-v1","porseni-mts-registration-v2","porseni-mts-registration-v3"];
+      if (!validFormats.includes(data.format) || !data.id_pendaftaran || !data.madrasah) {
+        throw new Error("format tidak dikenali");
+      }
+      const expanded = expandRecords(data, file.name);
+      if (expanded.length === 0) throw new Error("tidak ada data lomba");
+
+      // Cek duplikat berdasarkan id_utama + lomba
+      const dups = expanded.filter(e => records.some(r => r.id_pendaftaran === e.id_pendaftaran));
+      if (dups.length === expanded.length) {
+        errs.push(file.name + ": ID duplikat dilewati");
+        continue;
+      }
+      records.push(...expanded);
+      fileNames.push(file.name);
+      ok++;
+    } catch (err) {
+      errs.push(file.name + ": file JSON tidak valid atau bukan formulir PORSENI");
+    }
+  }
+  $("#status").textContent = `Berhasil membaca ${ok} file. ${errs.length ? errs.join(" | ") : ""}`;
+  render();
+  e.target.value = "";
+});
+
+$("#search").addEventListener("input", render);
+$("#filter").addEventListener("change", render);
+
+$("#rows").addEventListener("click", e => {
+  const v = e.target.dataset.view;
+  const d = e.target.dataset.del;
+  const docs = e.target.dataset.docs;
+
+  if (docs !== undefined){
+    const r = records[Number(docs)];
+    let count = 0;
+    for (const p of (r.peserta || [])){
+      for (const key of ["foto","ijazah","kk"]){
+        const f = p.dokumen?.[key];
+        if (!f?.data_url) continue;
+        const a = document.createElement("a");
+        a.href = f.data_url;
+        a.download = (String(p.nama || "peserta").replace(/[^a-z0-9_-]/gi,"_") + "_" + key + "_" +
+          String(f.nama_file || "dokumen").replace(/[^a-z0-9._-]/gi,"_")).slice(0,150);
+        document.body.appendChild(a); a.click(); a.remove();
+        count++;
+      }
+    }
+    if (count) alert("Permintaan unduh " + count + " dokumen dikirim ke browser. Jika banyak file, browser mungkin meminta izin unduhan berulang.");
+    else alert("Dokumen tidak ditemukan di JSON ini.");
+  }
+
+  if (v !== undefined){
+    const r = records[Number(v)];
+    const data = r._original || r;
+    const w = window.open("","_blank");
+    if (w){
+      w.document.write("<pre style='white-space:pre-wrap;overflow-wrap:anywhere;font:13px monospace;padding:20px'></pre>");
+      w.document.querySelector("pre").textContent = JSON.stringify(data, null, 2);
+      w.document.close();
+    }
+  }
+
+  if (d !== undefined){
+    if (confirm("Hapus data ini dari rekap sementara? File asli tidak ikut terhapus.")){
+      records.splice(Number(d), 1);
+      render();
+    }
+  }
+});
+
+function download(name, content, type){
+  const blob = new Blob([content], {type});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = name;
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+$("#exportAll").addEventListener("click", () => {
+  if (!records.length){ alert("Belum ada data untuk diekspor."); return; }
+  download("rekap-porseni-mts.json", JSON.stringify({
+    format: "porseni-mts-rekap-v2",
+    tanggal_ekspor: new Date().toISOString(),
+    jumlah_file: fileNames.length,
+    jumlah_pendaftaran_lomba: records.length,
+    daftar_file: fileNames,
+    pendaftaran_lomba: records.map(({_original,_file,...rest}) => rest)
+  }, null, 2), "application/json;charset=utf-8");
+});
+
+$("#exportCSV").addEventListener("click", () => {
+  if (!records.length){ alert("Belum ada data untuk diekspor."); return; }
+  const cols = ["id_pendaftaran","id_utama","tanggal_daftar","madrasah","kabupaten_kota","lomba","jenis","kategori_peserta","peserta","kelas","pembina","whatsapp","status"];
+  const rows = [cols, ...records.map(r => [
+    r.id_pendaftaran,
+    r.id_utama,
+    r.tanggal_daftar,
+    r.madrasah?.nama,
+    r.madrasah?.kabupaten_kota,
+    r.lomba?.nama,
+    r.lomba?.jenis,
+    r.lomba?.kategori_peserta,
+    (r.peserta || []).map(p => p.nama).join("; "),
+    (r.peserta || []).map(p => p.kelas).join("; "),
+    r.pembina?.nama,
+    r.pembina?.whatsapp,
+    r.status
+  ])];
+  const csv = rows.map(row => row.map(v => '"' + String(v ?? "").replace(/"/g,'""') + '"').join(",")).join("\r\n");
+  download("rekap-porseni-mts.csv", "\ufeff" + csv, "text/csv;charset=utf-8");
+});
+
+$("#clear").addEventListener("click", () => {
+  if (confirm("Kosongkan seluruh rekap sementara? File asli tidak ikut terhapus.")){
+    records = []; fileNames = [];
+    $("#status").textContent = "Rekap sementara telah dikosongkan.";
+    render();
+  }
+});
+</script></body></html>

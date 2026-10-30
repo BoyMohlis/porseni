@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#126b45"><title>Formulir Pendaftaran | PORSENI MTs</title><link rel="stylesheet" href="style.css">
+  <style>
+    .form-page{background:#f4f7f4;min-height:100vh}.form-top{background:var(--green-dark);color:white;padding:34px 5%;}.form-top .back{display:inline-block;color:#d8eadf;font-size:12px;margin-bottom:15px}.form-top h1{font-size:clamp(28px,4vw,42px);letter-spacing:-1px;margin:0 0 8px}.form-top p{font-size:13px;color:#cfe0d5;margin:0}.form-container{width:min(880px,92%);margin:28px auto 60px}.notice{padding:14px 16px;border:1px solid #ecd79c;background:#fff8e3;color:#775b17;border-radius:13px;font-size:12px;margin-bottom:18px}.form-card{background:white;border:1px solid var(--line);border-radius:20px;padding:clamp(18px,4vw,30px);margin-bottom:18px;box-shadow:0 8px 25px #173e2907}.form-card h2{font-size:18px;margin:0 0 5px}.form-card .sub{font-size:12px;color:var(--muted);margin-bottom:22px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:800;color:#3b4e42}.field label span{color:#c14d3c}.field input,.field select,.field textarea{width:100%;border:1px solid #dce5dd;background:#fff;border-radius:11px;padding:12px 13px;outline:none;color:var(--ink);font-size:13px}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px #126b4515}.field textarea{min-height:85px;resize:vertical}.field small{font-size:10px;color:var(--muted)}
+    .lomba-entry{border:1px solid #d8e6dd;border-radius:15px;padding:15px;margin-bottom:15px;background:#fbfdfb}
+    .lomba-entry-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
+    .lomba-entry-head h3{margin:0;font-size:14px;color:var(--green);letter-spacing:.2px}
+    .remove-lomba{border:0;background:#fee9e7;color:#a93d32;border-radius:8px;padding:7px 11px;cursor:pointer;font-size:11px;font-weight:800}
+    .lomba-entry .member-list{margin-top:14px}
+    .lomba-entry .add-member{margin-top:10px}
+    .count-info{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-bottom:10px}
+    .count-info b{color:var(--green)}
+    .pembina-sub{margin-top:14px;padding-top:14px;border-top:1px dashed #cfe0d5}
+    .pembina-sub .mini-label{display:block;font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+    .member-list{display:grid;gap:12px}.member-row{display:grid;grid-template-columns:1fr .65fr auto;gap:10px;align-items:end;padding:13px;background:#f7faf7;border:1px solid var(--line);border-radius:13px}.member-docs{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding-top:8px;border-top:1px dashed #d5e2d8}.member-docs .field{min-width:0}.member-docs input{font-size:11px;padding:9px}.member-docs .file-status{font-size:10px;color:var(--muted);overflow-wrap:anywhere}.file-preview{display:none;width:64px;height:76px;object-fit:cover;border-radius:8px;border:1px solid #dce5dd;margin-top:5px}.upload-note{background:#f1f8f2;border:1px solid #d9e9dc;border-radius:12px;padding:12px;font-size:11px;color:#496454;line-height:1.6;margin-bottom:14px}.member-row .field label{font-size:11px}.remove-member{border:0;background:#fee9e7;color:#a93d32;border-radius:10px;padding:11px;cursor:pointer}.btn-small{border:1px solid #b8d6c2;background:#f2faf4;color:var(--green);border-radius:10px;padding:10px 13px;font-weight:800;font-size:12px;cursor:pointer}.btn-add-lomba{border:1px dashed #8bbfa0;background:#eefaf2;color:var(--green);border-radius:12px;padding:13px;font-weight:800;font-size:13px;cursor:pointer;width:100%;margin-top:4px}
+    .form-actions{display:flex;gap:10px;flex-wrap:wrap}.btn-muted{background:#e9efea;color:#3f5446}.form-message{display:none;border-radius:12px;padding:13px;font-size:12px;margin-top:15px}.form-message.show{display:block}.form-message.error{background:#fff0ed;color:#9b3024}.form-message.success{background:#eaf8ee;color:#17683e}.privacy-note{font-size:11px;color:var(--muted);margin:15px 0 0}.form-footer{text-align:center;font-size:11px;color:var(--muted);padding:20px}.form-top-inner{width:min(880px,92%);margin:auto}@media(max-width:600px){.member-docs{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.member-row{grid-template-columns:1fr 1fr}.member-row .remove-member{grid-column:1/-1}.form-actions .btn{width:100%}}
+  </style>
+</head>
+<body class="form-page">
+  <header class="form-top"><div class="form-top-inner"><a class="back" href="index.html">← Kembali ke portal PORSENI</a><h1>Formulir Pendaftaran Madrasah</h1><p>Satu formulir untuk satu madrasah, bisa mendaftar banyak cabang lomba sekaligus. Setiap cabang lomba punya pembina/pendamping sendiri. Hasilnya satu file JSON.</p></div></header>
+  <main class="form-container">
+    <div class="notice"><b>Mode offline:</b> data tidak dikirim ke internet. Setelah formulir valid, klik <b>Ekspor JSON</b> dan serahkan file hasil unduhan kepada panitia. Satu file JSON bisa memuat lebih dari satu cabang lomba, masing-masing dengan pembina dan peserta sendiri.</div>
+    <form id="registrationForm" novalidate>
+      <section class="form-card"><h2>01. Data madrasah</h2><p class="sub">Informasi asal peserta dan kontak yang dapat dihubungi.</p>
+        <div class="form-grid">
+          <div class="field full"><label for="madrasah">Nama madrasah <span>*</span></label><input id="madrasah" name="madrasah" required placeholder="Contoh: MTs Miftahul Khoir"></div>
+          <div class="field"><label for="nsm">NSM (jika ada)</label><input id="nsm" name="nsm" placeholder="Nomor Statistik Madrasah"></div>
+          <div class="field"><label for="kabupaten">Kabupaten/Kota <span>*</span></label><input id="kabupaten" name="kabupaten" required placeholder="Contoh: Pamekasan"></div>
+          <div class="field"><label for="kecamatan">Kecamatan</label><input id="kecamatan" name="kecamatan" placeholder="Nama kecamatan"></div>
+          <div class="field"><label for="alamat">Alamat madrasah</label><input id="alamat" name="alamat" placeholder="Desa / alamat singkat"></div>
+        </div>
+      </section>
+
+      <section class="form-card"><h2>02. Cabang lomba yang diikuti</h2><p class="sub">Tambahkan satu entri untuk setiap cabang lomba. Setiap cabang punya pembina dan daftar pesertanya sendiri.</p>
+        <div class="upload-note"><b>Dokumen wajib per peserta:</b> foto siswa (maks. 2 MB), ijazah jenjang sebelumnya (maks. 5 MB), dan Kartu Keluarga/KK (maks. 5 MB). Format foto: JPG/PNG; ijazah dan KK: JPG/PNG/PDF. Semua berkas akan disimpan di dalam satu file JSON, jadi <b>semakin banyak lomba dan peserta, semakin besar file JSON</b>.</div>
+        <div class="count-info"><span>Total lomba: <b id="countLomba">0</b></span> <span>Total peserta: <b id="countPeserta">0</b></span></div>
+        <div id="lombaList"></div>
+        <button type="button" id="addLomba" class="btn-add-lomba">＋ Tambah cabang lomba</button>
+      </section>
+
+      <section class="form-card"><h2>03. Periksa dan ekspor</h2><p class="sub">Pastikan data sudah benar sebelum menyimpan file pendaftaran.</p>
+        <div class="form-grid">
+          <div class="field full"><label for="catatan">Catatan untuk panitia (opsional)</label><textarea id="catatan" name="catatan" placeholder="Informasi tambahan untuk panitia"></textarea></div>
+        </div>
+        <div class="form-actions"><button type="submit" class="btn btn-green">⬇ Ekspor JSON</button><button type="button" id="previewBtn" class="btn btn-muted">Pratinjau data</button><button type="reset" class="btn btn-muted">Kosongkan formulir</button></div>
+        <div id="message" class="form-message" role="status"></div>
+        <pre id="preview" style="display:none;white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f7f4;padding:14px;border-radius:12px;font-size:11px;max-height:360px;overflow:auto;margin-top:15px"></pre>
+        <p class="privacy-note">Catatan: file JSON berisi data pribadi peserta. Simpan dan kirimkan hanya kepada panitia melalui jalur yang disepakati.</p>
+      </section>
+    </form>
+  </main>
+  <footer class="form-footer">PORSENI MTs • Formulir pendaftaran offline</footer>
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+let competitions = [];
+
+function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function showMessage(text,type){const el=$("#message");el.textContent=text;el.className="form-message show "+type;}
+function clearMessage(){const el=$("#message");el.textContent="";el.className="form-message";}
+
+function refreshLombaSelects(){
+  $$(".lomba-select").forEach(sel => {
+    const current = sel.value;
+    sel.innerHTML = '<option value="">Pilih cabang lomba</option>' +
+      competitions.map(x => `<option value="${esc(x.id)}">${esc(x.nama)} — ${esc(x.kategori||"")}</option>`).join("");
+    if (current) sel.value = current;
+  });
+}
+function updateCounts(){
+  $("#countLomba").textContent = $$(".lomba-entry").length;
+  let total = 0;
+  $$(".lomba-entry").forEach(e => total += e.querySelectorAll(".member-row").length);
+  $("#countPeserta").textContent = total;
+}
+function renumberLomba(){
+  $$(".lomba-entry").forEach((entry, i) => {
+    entry.querySelector(".lomba-entry-head h3").textContent = `Lomba #${i+1}`;
+  });
+}
+function addLomba(){
+  const container = $("#lombaList");
+  const entry = document.createElement("div");
+  entry.className = "lomba-entry";
+  entry.innerHTML = `
+    <div class="lomba-entry-head">
+      <h3>Lomba</h3>
+      <button type="button" class="remove-lomba" aria-label="Hapus lomba">Hapus lomba</button>
+    </div>
+    <div class="form-grid">
+      <div class="field full">
+        <label>Cabang lomba <span>*</span></label>
+        <select class="lomba-select" required>
+          <option value="">Pilih cabang lomba</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Kategori peserta <span>*</span></label>
+        <select class="kategori-select" required>
+          <option value="">Pilih kategori</option>
+          <option>Putra</option><option>Putri</option><option>Campuran</option><option>Terbuka</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Jenis lomba</label>
+        <input class="jenis-input" readonly placeholder="Otomatis dari data lomba">
+      </div>
+    </div>
+    <div class="pembina-sub">
+      <span class="mini-label">Pembina / pendamping lomba ini</span>
+      <div class="form-grid">
+        <div class="field"><label>Nama pembina <span>*</span></label><input class="pembina-nama" required placeholder="Nama lengkap pembina"></div>
+        <div class="field"><label>No WhatsApp <span>*</span></label><input class="pembina-wa" type="tel" required placeholder="Contoh: 08xxxxxxxxxx"></div>
+      </div>
+    </div>
+    <div class="member-list"></div>
+    <button type="button" class="btn-small add-member">＋ Tambah anggota</button>
+  `;
+  const memberList = entry.querySelector(".member-list");
+
+  entry.querySelector(".remove-lomba").addEventListener("click", () => {
+    if (container.children.length > 1) {
+      if (confirm("Hapus cabang lomba ini beserta pembina dan pesertanya?")) {
+        entry.remove();
+        renumberLomba();
+        updateCounts();
+      }
+    } else {
+      showMessage("Minimal satu cabang lomba harus ada.", "error");
+    }
+  });
+
+  entry.querySelector(".lomba-select").addEventListener("change", e => {
+    const item = competitions.find(x => x.id === e.target.value);
+    entry.querySelector(".jenis-input").value = item?.jenis || "";
+  });
+
+  entry.querySelector(".add-member").addEventListener("click", () => {
+    addMember(memberList);
+    updateCounts();
+  });
+
+  container.appendChild(entry);
+  refreshLombaSelects();
+  addMember(memberList);
+  renumberLomba();
+  updateCounts();
+}
+
+function addMember(container, name="", kelas="VII"){
+  if (!container) return;
+  const row = document.createElement("div");
+  row.className = "member-row";
+  row.innerHTML = `
+    <div class="field"><label>Nama lengkap <span>*</span></label><input class="member-name" required value="${esc(name)}" placeholder="Nama peserta"></div>
+    <div class="field"><label>Kelas <span>*</span></label><select class="member-class" required>${["VII","VIII","IX"].map(k=>`<option ${k===kelas?"selected":""}>${k}</option>`).join("")}</select></div>
+    <button type="button" class="remove-member" aria-label="Hapus anggota">Hapus</button>
+    <div class="member-docs">
+      <div class="field"><label>Foto siswa <span>*</span></label><input class="doc-photo" type="file" accept="image/jpeg,image/png" required><div class="file-status">JPG/PNG • maks. 2 MB</div><img class="file-preview photo-preview" alt="Pratinjau foto"></div>
+      <div class="field"><label>Ijazah sebelumnya <span>*</span></label><input class="doc-ijazah" type="file" accept="image/jpeg,image/png,application/pdf" required><div class="file-status">JPG/PNG/PDF • maks. 5 MB</div></div>
+      <div class="field"><label>Kartu Keluarga (KK) <span>*</span></label><input class="doc-kk" type="file" accept="image/jpeg,image/png,application/pdf" required><div class="file-status">JPG/PNG/PDF • maks. 5 MB</div></div>
+    </div>`;
+  row.querySelector(".remove-member").addEventListener("click", () => {
+    if (container.children.length > 1) { row.remove(); updateCounts(); }
+    else showMessage("Minimal harus ada satu peserta per lomba.", "error");
+  });
+  container.appendChild(row);
+}
+
+function fileToData(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.onload = () => resolve({nama_file:file.name,tipe_mime:file.type||"application/octet-stream",ukuran_byte:file.size,data_url:reader.result});
+    reader.onerror = () => reject(new Error("Gagal membaca file " + file.name));
+    reader.readAsDataURL(file);
+  });
+}
+
+async function loadCompetitions(){
+  try{
+    const res = await fetch("data/lomba.json", {cache:"no-store"});
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    competitions = data.lomba || [];
+    refreshLombaSelects();
+    const params = new URLSearchParams(location.search);
+    const preId = params.get("lomba");
+    if (preId && competitions.some(x => x.id === preId)) {
+      const firstSelect = document.querySelector(".lomba-select");
+      if (firstSelect) {
+        firstSelect.value = preId;
+        firstSelect.dispatchEvent(new Event("change"));
+      }
+    }
+  }catch(e){
+    $$(".lomba-select").forEach(sel => {
+      sel.innerHTML = '<option value="">Data lomba gagal dibaca</option>';
+    });
+    showMessage("Jalankan melalui server lokal (contoh XAMPP) agar file JSON dapat dibaca.","error");
+  }
+}
+
+async function collectData(){
+  clearMessage();
+  const form = $("#registrationForm");
+  if (!form.reportValidity()) return null;
+
+  const entries = [...$$(".lomba-entry")];
+  if (entries.length === 0) { showMessage("Tambahkan minimal satu cabang lomba.","error"); return null; }
+
+  const pendaftaranLomba = [];
+  const limits = {foto:2*1024*1024, ijazah:5*1024*1024, kk:5*1024*1024};
+
+  for (let i = 0; i < entries.length; i++){
+    const entry = entries[i];
+    const lombaId = entry.querySelector(".lomba-select").value;
+    if (!lombaId) { showMessage(`Pilih cabang lomba untuk entri lomba #${i+1}.`,"error"); return null; }
+    const selected = competitions.find(x => x.id === lombaId);
+    const kategoriPeserta = entry.querySelector(".kategori-select").value;
+    if (!kategoriPeserta) { showMessage(`Pilih kategori peserta untuk lomba ${selected?.nama||"#"+(i+1)}.`,"error"); return null; }
+
+    const pembinaNama = entry.querySelector(".pembina-nama").value.trim();
+    const pembinaWa = entry.querySelector(".pembina-wa").value.trim();
+    if (!pembinaNama) { showMessage(`Nama pembina wajib diisi untuk lomba ${selected?.nama||"#"+(i+1)}.`,"error"); return null; }
+    if (!pembinaWa) { showMessage(`Nomor WhatsApp pembina wajib diisi untuk lomba ${selected?.nama||"#"+(i+1)}.`,"error"); return null; }
+
+    const memberRows = [...entry.querySelectorAll(".member-row")];
+    if (memberRows.length === 0) { showMessage(`Tambahkan minimal satu peserta untuk lomba ${selected?.nama||"#"+(i+1)}.`,"error"); return null; }
+
+    const peserta = [];
+    for (let j = 0; j < memberRows.length; j++){
+      const row = memberRows[j];
+      const nama = row.querySelector(".member-name").value.trim();
+      const kelas = row.querySelector(".member-class").value;
+      if (!nama) { showMessage(`Nama peserta wajib diisi (lomba ${selected?.nama||"#"+(i+1)}, peserta #${j+1}).`,"error"); return null; }
+
+      const files = {
+        foto: row.querySelector(".doc-photo").files[0],
+        ijazah: row.querySelector(".doc-ijazah").files[0],
+        kk: row.querySelector(".doc-kk").files[0]
+      };
+
+      for (const key of ["foto","ijazah","kk"]){
+        const f = files[key];
+        if (!f) { showMessage(`Lengkapi ${key} untuk peserta: ${nama} (lomba ${selected?.nama||""}).`,"error"); return null; }
+        if (f.size > limits[key]) { showMessage(`Ukuran file ${f.name} melebihi batas ${key==="foto"?"2 MB":"5 MB"}.`,"error"); return null; }
+        if (key === "foto" && !["image/jpeg","image/png"].includes(f.type)) { showMessage("Foto harus berformat JPG atau PNG.","error"); return null; }
+        if (key !== "foto" && !["image/jpeg","image/png","application/pdf"].includes(f.type)) { showMessage("Ijazah dan KK harus berformat JPG, PNG, atau PDF.","error"); return null; }
+      }
+
+      let dokumen;
+      try{
+        dokumen = {
+          foto: await fileToData(files.foto),
+          ijazah: await fileToData(files.ijazah),
+          kk: await fileToData(files.kk)
+        };
+      }catch(err){ showMessage(err.message,"error"); return null; }
+
+      peserta.push({ nama, kelas, dokumen });
+    }
+
+    pendaftaranLomba.push({
+      lomba: {
+        id: selected?.id || "",
+        nama: selected?.nama || "",
+        kategori: selected?.kategori || "",
+        jenis: selected?.jenis || "Perorangan",
+        kategori_peserta: kategoriPeserta
+      },
+      pembina: { nama: pembinaNama, whatsapp: pembinaWa },
+      peserta
+    });
+  }
+
+  const now = new Date();
+  const date = now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2,"0") + "-" + String(now.getDate()).padStart(2,"0");
+  const id = "PORSENI-" + now.getFullYear() + String(now.getMonth()+1).padStart(2,"0") + String(now.getDate()).padStart(2,"0") + "-" + Math.random().toString(36).slice(2,7).toUpperCase();
+
+  return {
+    format: "porseni-mts-registration-v4",
+    id_pendaftaran: id,
+    tanggal_daftar: date,
+    madrasah: {
+      nama: $("#madrasah").value.trim(),
+      nsm: $("#nsm").value.trim(),
+      kabupaten_kota: $("#kabupaten").value.trim(),
+      kecamatan: $("#kecamatan").value.trim(),
+      alamat: $("#alamat").value.trim()
+    },
+    pendaftaran_lomba: pendaftaranLomba,
+    catatan: $("#catatan").value.trim(),
+    status: "menunggu_verifikasi"
+  };
+}
+
+function stripDocs(data){
+  const preview = JSON.parse(JSON.stringify(data));
+  for (const entry of preview.pendaftaran_lomba){
+    for (const p of entry.peserta){
+      if (p.dokumen){
+        for (const key of Object.keys(p.dokumen)){
+          delete p.dokumen[key].data_url;
+        }
+      }
+    }
+  }
+  return preview;
+}
+
+$("#addLomba").addEventListener("click", addLomba);
+
+$("#previewBtn").addEventListener("click", async () => {
+  const btn = $("#previewBtn"); btn.disabled = true; btn.textContent = "Menyiapkan pratinjau...";
+  const data = await collectData();
+  btn.disabled = false; btn.textContent = "Pratinjau data";
+  if (!data) return;
+  const preview = stripDocs(data);
+  const lombaCount = preview.pendaftaran_lomba.length;
+  const pesertaCount = preview.pendaftaran_lomba.reduce((n,x) => n + x.peserta.length, 0);
+  $("#preview").style.display = "block";
+  $("#preview").textContent =
+    `Total lomba: ${lombaCount}\nTotal peserta: ${pesertaCount}\n\n` +
+    JSON.stringify(preview, null, 2) +
+    "\n\nCatatan: isi data_url/Base64 tidak ditampilkan di pratinjau, tetapi tetap disertakan saat ekspor JSON.";
+  showMessage("Pratinjau dibuat. Dokumen sudah diperiksa dan siap disertakan saat ekspor.","success");
+});
+
+$("#registrationForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const submitBtn = $("#registrationForm button[type=submit]");
+  submitBtn.disabled = true; submitBtn.textContent = "Menyiapkan file...";
+  const data = await collectData();
+  submitBtn.disabled = false; submitBtn.textContent = "⬇ Ekspor JSON";
+  if (!data) return;
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = data.id_pendaftaran + ".json";
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+
+  const preview = stripDocs(data);
+  $("#preview").style.display = "block";
+  $("#preview").textContent = JSON.stringify(preview, null, 2) + "\n\nDokumen ikut tersimpan di dalam file JSON sebagai Base64.";
+  showMessage(`File JSON berhasil diunduh (${data.pendaftaran_lomba.length} cabang lomba, ${data.pendaftaran_lomba.reduce((n,x)=>n+x.peserta.length,0)} peserta). Karena berisi dokumen Base64, ukuran file bisa besar.`,`success`);
+});
+
+$("#registrationForm").addEventListener("reset", () => {
+  setTimeout(() => {
+    $("#lombaList").innerHTML = "";
+    addLomba();
+    $("#preview").style.display = "none";
+    clearMessage();
+  }, 0);
+});
+
+$("#registrationForm").addEventListener("change", e => {
+  if (!e.target.matches("input[type=file]")) return;
+  const input = e.target;
+  const file = input.files[0];
+  const field = input.closest(".field");
+  const status = field.querySelector(".file-status");
+  if (file){
+    status.textContent = "Dipilih: " + file.name + " (" + (file.size/1024/1024).toFixed(2) + " MB)";
+    if (input.classList.contains("doc-photo")){
+      const img = field.querySelector(".photo-preview");
+      img.src = URL.createObjectURL(file);
+      img.style.display = "block";
+    }
+  } else if (status){
+    status.textContent = "Belum ada file dipilih";
+  }
+});
+
+addLomba();
+loadCompetitions();
+</script>
+</body>
+</html>

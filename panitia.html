@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Peserta - Panitia PORSENI MTs</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body{background:#f4f7f4;margin:0}
+    .admin-head{background:#084b32;color:#fff;padding:28px 5%}
+    .admin-head a{color:#d7e9dd;font-size:12px;text-decoration:none}
+    .admin-head h1{font-size:30px;margin:12px 0 4px;font-family:Manrope,sans-serif}
+    .admin-head p{font-size:12px;color:#cde0d3;margin:0}
+    .admin-wrap{width:min(1300px,95%);margin:25px auto 60px}
+    .notice{padding:14px 16px;border:1px solid #ecd79c;background:#fff8e3;color:#775b17;border-radius:13px;font-size:12px;margin-bottom:18px;line-height:1.7}
+    .tools{background:#fff;border:1px solid #e3eae5;border-radius:17px;padding:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+    .tools input,.tools select{padding:11px;border:1px solid #dce5dd;border-radius:10px;min-width:170px;outline:none;font-size:13px;background:#fff}
+    .tools input:focus,.tools select:focus{border-color:#126b45;box-shadow:0 0 0 3px #126b4515}
+    .tools .btn{font-size:12px;padding:11px 15px}
+    .file-label{display:inline-flex;align-items:center;gap:7px;border-radius:11px;padding:11px 15px;background:#e8f5ed;color:#126b45;font-size:12px;font-weight:800;cursor:pointer;border:0}
+    .file-label:hover{background:#d3eade}
+    .file-label input{display:none}
+    .summary{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}
+    .summary-card{background:#fff;border:1px solid #e3eae5;border-radius:13px;padding:15px 18px;text-align:center}
+    .summary-card strong{display:block;color:#126b45;font-size:24px;font-family:Manrope,sans-serif;line-height:1.1;margin-bottom:4px}
+    .summary-card span{font-size:11px;color:#66766d;font-weight:600}
+
+    .kategori-section{background:#fff;border:1px solid #e3eae5;border-radius:18px;padding:22px;margin-bottom:20px}
+    .kategori-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #e8efe9;flex-wrap:wrap;gap:10px}
+    .kategori-head h2{margin:0;font-size:19px;color:#126b45;font-family:Manrope,sans-serif;letter-spacing:-.3px}
+    .kategori-head .badge{background:#e8f5ed;color:#126b45;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:800}
+
+    .peserta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+    .peserta-card{border:1px solid #e3eae5;border-radius:14px;padding:14px;background:#fbfdfb;display:grid;grid-template-columns:82px 1fr;gap:14px;align-items:start;transition:.2s}
+    .peserta-card:hover{border-color:#b8d6c2;background:#fff;box-shadow:0 4px 14px #126b450f}
+
+    .peserta-photo{width:82px;height:104px;border-radius:10px;object-fit:cover;background:#e3eae5;border:1px solid #dce5dd;display:block}
+    .peserta-photo-placeholder{width:82px;height:104px;border-radius:10px;background:#e9efe9;display:grid;place-items:center;color:#a0b0a5;font-size:32px;border:1px solid #dce5dd}
+    .peserta-info{font-size:12px;line-height:1.55;min-width:0}
+    .peserta-name{font-weight:800;font-size:14px;color:#192c24;margin:0 0 2px;overflow-wrap:anywhere}
+    .peserta-madrasah{font-size:11px;color:#66766d;margin:0 0 8px;font-style:italic;overflow-wrap:anywhere}
+    .peserta-meta{font-size:11px;color:#3b4e42;margin-bottom:3px;overflow-wrap:anywhere}
+    .peserta-meta b{color:#126b45}
+    .peserta-meta a{color:#128040;text-decoration:none;font-weight:700}
+    .peserta-meta a:hover{text-decoration:underline}
+    .peserta-actions{margin-top:9px;display:flex;gap:5px;flex-wrap:wrap}
+    .btn-mini{font-size:10px;padding:5px 9px;border-radius:7px;border:0;background:#e8f5ed;color:#126b45;cursor:pointer;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:3px;transition:.15s}
+    .btn-mini:hover{background:#d3eade;transform:translateY(-1px)}
+    .btn-mini.muted{background:#f0f4f1;color:#66766d}
+    .btn-mini.muted:hover{background:#e6ebe7}
+
+    .empty-state{padding:50px;text-align:center;color:#66766d;font-size:13px;background:#fff;border:1px dashed #cdd9cf;border-radius:16px}
+
+    @media(max-width:850px){
+      .summary{grid-template-columns:repeat(2,1fr)}
+      .tools input,.tools select{min-width:130px;flex:1}
+    }
+    @media(max-width:520px){
+      .peserta-grid{grid-template-columns:1fr}
+      .peserta-card{grid-template-columns:70px 1fr;padding:12px;gap:12px}
+      .peserta-photo,.peserta-photo-placeholder{width:70px;height:88px}
+      .admin-head h1{font-size:24px}
+    }
+
+    @media print{
+      .no-print{display:none!important}
+      .admin-head{background:#fff!important;color:#000!important;padding:0 0 14px!important;border-bottom:2px solid #126b45;margin-bottom:14px}
+      .admin-head a{color:#666!important}
+      .admin-head h1{font-size:22px;color:#084b32!important}
+      .admin-head p{color:#333!important}
+      body{background:#fff!important}
+      .admin-wrap{width:100%!important;margin:0!important}
+      .kategori-section{border:1px solid #999!important;page-break-inside:auto;box-shadow:none!important}
+      .kategori-head{page-break-after:avoid}
+      .peserta-card{page-break-inside:avoid;border:1px solid #ccc!important;background:#fff!important}
+      .peserta-actions{display:none!important}
+      .summary{grid-template-columns:repeat(5,1fr)!important}
+      .summary-card{border:1px solid #999!important}
+    }
+  </style>
+</head>
+<body>
+<header class="admin-head">
+  <a href="index.html">← Kembali ke website PORSENI</a>
+  <h1>📋 Data Peserta Terdaftar</h1>
+  <p>Halaman khusus panitia. Menampilkan data peserta lengkap dengan foto, lembaga, dan kontak pembina dari file rekap JSON.</p>
+</header>
+
+<main class="admin-wrap">
+  <div class="notice no-print">
+    <b>ℹ️ Cara pakai:</b> Klik <b>＋ Pilih file rekap JSON</b> → pilih file hasil ekspor dari halaman <code>rekap.html</code> (yang <b>lengkap</b>, bukan yang publik). Bisa pilih banyak file sekaligus. Data tidak diunggah ke server — semua diproses di browser.
+  </div>
+
+  <div class="tools no-print">
+    <label class="file-label">＋ Pilih file rekap JSON <input id="fileInput" type="file" accept=".json,application/json" multiple></label>
+    <input id="search" type="search" placeholder="🔍 Cari nama / lembaga / pembina…">
+    <select id="filterKategori"><option value="">Semua kategori</option></select>
+    <select id="filterCabang"><option value="">Semua cabang lomba</option></select>
+    <button id="exportCSV" class="btn btn-green">📤 Ekspor CSV</button>
+    <button id="printBtn" class="btn btn-muted">🖨 Cetak</button>
+    <button id="clearBtn" class="btn btn-muted">Kosongkan</button>
+  </div>
+
+  <div class="summary" id="summary"></div>
+  <div id="container"><div class="empty-state">Belum ada data. Silakan pilih file rekap JSON terlebih dahulu.</div></div>
+</main>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+
+let allEntries = [];   // semua baris peserta yang sudah dinormalisasi
+let cardIndex = [];    // referensi entry utk tombol unduh, direset tiap render
+let meta = { files: 0, tanggal: null };
+
+/* ====== Utility ====== */
+function esc(v=""){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function normalizePhone(wa){
+  if (!wa) return "";
+  let d = String(wa).replace(/\D/g,"");
+  if (d.startsWith("0")) d = "62" + d.slice(1);
+  if (d.startsWith("8")) d = "62" + d;
+  return d;
+}
+function shortDate(iso){
+  if (!iso) return "-";
+  try{ const d = new Date(iso); if (isNaN(d)) return iso;
+    return d.toLocaleString("id-ID",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+  }catch{return iso;}
+}
+
+/* ====== Loader: mendukung rekap-v2, registrasi v1/v2/v3/v4, dan array campuran ====== */
+function expandOneRegistration(r){
+  const lombaList = Array.isArray(r.pendaftaran_lomba)
+    ? r.pendaftaran_lomba
+    : (r.lomba ? [{ lomba: r.lomba, pembina: r.pembina, peserta: r.peserta || [] }] : []);
+
+  const out = [];
+  for (const entry of lombaList){
+    const lomba = entry.lomba || {};
+    const pembina = entry.pembina || r.pembina || {};
+    const pesertaList = Array.isArray(entry.peserta) ? entry.peserta : [];
+    for (const p of pesertaList){
+      const dok = p.dokumen || {};
+      out.push({
+        kategori: (lomba.kategori || "Lainnya").trim() || "Lainnya",
+        cabang: (lomba.nama || "Lainnya").trim() || "Lainnya",
+        cabang_id: lomba.id || "",
+        jenis: lomba.jenis || "",
+        kategori_peserta: lomba.kategori_peserta || "-",
+        madrasah: (r.madrasah && r.madrasah.nama || "-").trim(),
+        kabupaten: (r.madrasah && r.madrasah.kabupaten_kota) || "",
+        pembina_nama: (pembina.nama || "-").trim(),
+        pembina_wa: pembina.whatsapp || pembina.wa || "",
+        nama: (p.nama || "-").trim(),
+        kelas: p.kelas || "-",
+        foto_url: dok.foto?.data_url || "",
+        foto_name: dok.foto?.nama_file || "foto.jpg",
+        ijazah_url: dok.ijazah?.data_url || "",
+        ijazah_name: dok.ijazah?.nama_file || "ijazah.pdf",
+        kk_url: dok.kk?.data_url || "",
+        kk_name: dok.kk?.nama_file || "kk.pdf",
+        status: r.status || "menunggu_verifikasi",
+        id_daftar: r.id_pendaftaran || ""
+      });
+    }
+  }
+  return out;
+}
+
+function parseFile(data){
+  // Terima: {pendaftaran_lomba: [...]}, {lomba: ...} single, atau array
+  let regs = [];
+  if (Array.isArray(data)) {
+    regs = data;
+  } else if (Array.isArray(data.pendaftaran_lomba) && data.pendaftaran_lomba[0]?.lomba) {
+    // Bisa jadi rekap-v2 (setiap item adalah registrasi lengkap)
+    // atau registrasi v3/v4 (setiap item adalah entry lomba)
+    // Bedanya: rekap-v2 item punya "madrasah"; v3/v4 item tidak (madrasah di root)
+    if (data.pendaftaran_lomba[0]?.madrasah){
+      regs = data.pendaftaran_lomba;
+    } else {
+      regs = [data]; // v3/v4 — bungkus jadi 1
+    }
+  } else if (data.lomba){
+    regs = [data]; // v1/v2
+  } else {
+    throw new Error("Format tidak dikenali");
+  }
+
+  let entries = [];
+  for (const r of regs) entries.push(...expandOneRegistration(r));
+  return {
+    entries,
+    meta: { files: data.jumlah_file || 1, tanggal: data.tanggal_ekspor || null }
+  };
+}
+
+/* ====== IntersectionObserver untuk lazy-render foto Base64 ====== */
+let photoObserver = null;
+function setupPhotoObserver(){
+  if (photoObserver) photoObserver.disconnect();
+  if (!("IntersectionObserver" in window)) {
+    // fallback: langsung set semua
+    $$('img[data-src]').forEach(img => { img.src = img.dataset.src; delete img.dataset.src; });
+    return;
+  }
+  photoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting){
+        const img = e.target;
+        img.src = img.dataset.src;
+        delete img.dataset.src;
+        photoObserver.unobserve(img);
+      }
+    });
+  }, { rootMargin: "200px" });
+  $$('img[data-src]').forEach(img => photoObserver.observe(img));
+}
+
+/* ====== Render ====== */
+function refreshFilters(){
+  const kats = [...new Set(allEntries.map(e => e.kategori))].sort();
+  const cabs = [...new Set(allEntries.map(e => e.cabang))].sort();
+
+  const selKat = $("#filterKategori");
+  const curKat = selKat.value;
+  selKat.innerHTML = '<option value="">Semua kategori</option>' + kats.map(k => `<option>${esc(k)}</option>`).join("");
+  selKat.value = kats.includes(curKat) ? curKat : "";
+
+  const selCab = $("#filterCabang");
+  const curCab = selCab.value;
+  selCab.innerHTML = '<option value="">Semua cabang lomba</option>' + cabs.map(c => `<option>${esc(c)}</option>`).join("");
+  selCab.value = cabs.includes(curCab) ? curCab : "";
+}
+
+function renderSummary(filtered){
+  const lembaga = new Set(filtered.map(e => e.madrasah)).size;
+  const kategori = new Set(filtered.map(e => e.kategori)).size;
+  const cabang = new Set(filtered.map(e => e.cabang)).size;
+  $("#summary").innerHTML = `
+    <div class="summary-card"><strong>${lembaga}</strong><span>Madrasah</span></div>
+    <div class="summary-card"><strong>${filtered.length}</strong><span>Peserta</span></div>
+    <div class="summary-card"><strong>${cabang}</strong><span>Cabang Lomba</span></div>
+    <div class="summary-card"><strong>${kategori}</strong><span>Kategori</span></div>
+    <div class="summary-card"><strong>${meta.files}</strong><span>File Sumber</span></div>
+  `;
+}
+
+function cardHtml(e, idx){
+  const wa = normalizePhone(e.pembina_wa);
+  const waLink = wa ? `<a href="https://wa.me/${wa}" target="_blank" rel="noopener">💬 ${esc(e.pembina_wa)}</a>` : "<span>—</span>";
+  return `
+    <article class="peserta-card">
+      ${e.foto_url
+        ? `<img class="peserta-photo" data-src="${esc(e.foto_url)}" alt="Foto ${esc(e.nama)}" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==">`
+        : `<div class="peserta-photo-placeholder">👤</div>`}
+      <div class="peserta-info">
+        <p class="peserta-name">${esc(e.nama)}</p>
+        <p class="peserta-madrasah">${esc(e.madrasah)}${e.kabupaten ? " • " + esc(e.kabupaten) : ""}</p>
+        <div class="peserta-meta">🏅 <b>${esc(e.cabang)}</b> — ${esc(e.kategori_peserta)}</div>
+        <div class="peserta-meta">🎓 Kelas ${esc(e.kelas)}${e.jenis ? " • " + esc(e.jenis) : ""}</div>
+        <div class="peserta-meta">👤 Pembina: <b>${esc(e.pembina_nama)}</b></div>
+        <div class="peserta-meta">📱 ${waLink}</div>
+        <div class="peserta-actions no-print">
+          ${e.foto_url ? `<button class="btn-mini" data-dl="foto" data-idx="${idx}">⬇ Foto</button>` : ""}
+          ${e.ijazah_url ? `<button class="btn-mini muted" data-dl="ijazah" data-idx="${idx}">⬇ Ijazah</button>` : ""}
+          ${e.kk_url ? `<button class="btn-mini muted" data-dl="kk" data-idx="${idx}">⬇ KK</button>` : ""}
+        </div>
+      </div>
+    </article>`;
+}
+
+function render(){
+  refreshFilters();
+  const katFilter = $("#filterKategori").value;
+  const cabFilter = $("#filterCabang").value;
+  const term = $("#search").value.toLowerCase().trim();
+
+  const filtered = allEntries.filter(e =>
+    (!katFilter || e.kategori === katFilter) &&
+    (!cabFilter || e.cabang === cabFilter) &&
+    (!term || [e.nama, e.madrasah, e.pembina_nama, e.kelas, e.cabang, e.kabupaten]
+      .join(" ").toLowerCase().includes(term))
+  );
+
+  renderSummary(filtered);
+
+  const container = $("#container");
+  if (filtered.length === 0){
+    container.innerHTML = `<div class="empty-state">Tidak ada peserta yang cocok dengan filter.<br>Coba ubah kata kunci atau filter.</div>`;
+    cardIndex = [];
+    return;
+  }
+
+  // Group by kategori
+  const groups = {};
+  filtered.forEach(e => {
+    if (!groups[e.kategori]) groups[e.kategori] = {items: [], cabang: new Set(), lembaga: new Set()};
+    groups[e.kategori].items.push(e);
+    groups[e.kategori].cabang.add(e.cabang);
+    groups[e.kategori].lembaga.add(e.madrasah);
+  });
+
+  cardIndex = [];
+  const html = Object.entries(groups)
+    .sort((a,b) => a[0].localeCompare(b[0]))
+    .map(([kat, data]) => {
+      const cards = data.items.map(e => {
+        const idx = cardIndex.length;
+        cardIndex.push(e);
+        return cardHtml(e, idx);
+      }).join("");
+      return `
+        <section class="kategori-section">
+          <div class="kategori-head">
+            <h2>🗂️ ${esc(kat)}</h2>
+            <span class="badge">${data.items.length} peserta • ${data.cabang.size} cabang • ${data.lembaga.size} lembaga</span>
+          </div>
+          <div class="peserta-grid">${cards}</div>
+        </section>`;
+    }).join("");
+
+  container.innerHTML = html;
+  setupPhotoObserver();
+}
+
+/* ====== File loader ====== */
+$("#fileInput").addEventListener("change", async (e) => {
+  const files = [...e.target.files];
+  if (files.length === 0) return;
+
+  let totalAdded = 0, errors = [];
+  for (const file of files){
+    try{
+      const text = await file.text();
+      const data = JSON.parse(text);
+      const { entries, meta: m } = parseFile(data);
+      if (entries.length === 0){
+        errors.push(file.name + ": tidak ada data peserta");
+        continue;
+      }
+      // Cegah duplikat berdasarkan nama+lembaga+cabang
+      const existingKeys = new Set(allEntries.map(x => x.nama + "|" + x.madrasah + "|" + x.cabang + "|" + x.kelas));
+      const fresh = entries.filter(x => !existingKeys.has(x.nama + "|" + x.madrasah + "|" + x.cabang + "|" + x.kelas));
+      allEntries.push(...fresh);
+      meta.files += m.files || 1;
+      if (m.tanggal && !meta.tanggal) meta.tanggal = m.tanggal;
+      totalAdded += fresh.length;
+    }catch(err){
+      errors.push(file.name + ": " + (err.message || "file tidak valid"));
+    }
+  }
+
+  if (totalAdded === 0 && errors.length){
+    alert("Gagal membaca file:\n\n" + errors.join("\n"));
+  } else {
+    if (errors.length) alert(`Berhasil menambah ${totalAdded} peserta. Beberapa file dilewati:\n\n` + errors.join("\n"));
+    render();
+  }
+  e.target.value = "";
+});
+
+/* ====== Download dokumen ====== */
+$("#container").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-dl]");
+  if (!btn) return;
+  const e2 = cardIndex[Number(btn.dataset.idx)];
+  if (!e2) return;
+  const key = btn.dataset.dl;
+  const map = {
+    foto:   { url: e2.foto_url,   name: e2.foto_name,   suffix: "foto" },
+    ijazah: { url: e2.ijazah_url, name: e2.ijazah_name, suffix: "ijazah" },
+    kk:     { url: e2.kk_url,     name: e2.kk_name,     suffix: "kk" }
+  };
+  const d = map[key];
+  if (!d.url){ alert("Dokumen tidak tersedia."); return; }
+  const safeName = String(e2.nama || "peserta").replace(/[^a-z0-9_-]/gi,"_");
+  const a = document.createElement("a");
+  a.href = d.url;
+  a.download = (safeName + "_" + d.suffix + "_" + String(d.name || "dokumen").replace(/[^a-z0-9._-]/gi,"_")).slice(0, 160);
+  document.body.appendChild(a); a.click(); a.remove();
+});
+
+/* ====== Filter & Search ====== */
+$("#search").addEventListener("input", render);
+$("#filterKategori").addEventListener("change", render);
+$("#filterCabang").addEventListener("change", render);
+
+/* ====== Ekspor CSV (dari data yang sudah difilter) ====== */
+$("#exportCSV").addEventListener("click", () => {
+  const katFilter = $("#filterKategori").value;
+  const cabFilter = $("#filterCabang").value;
+  const term = $("#search").value.toLowerCase().trim();
+  const filtered = allEntries.filter(e =>
+    (!katFilter || e.kategori === katFilter) &&
+    (!cabFilter || e.cabang === cabFilter) &&
+    (!term || [e.nama, e.madrasah, e.pembina_nama, e.kelas, e.cabang].join(" ").toLowerCase().includes(term))
+  );
+  if (filtered.length === 0){ alert("Tidak ada data untuk diekspor."); return; }
+
+  const cols = ["kategori","cabang","kategori_peserta","nama","kelas","madrasah","kabupaten","pembina","whatsapp","status","id_daftar"];
+  const rows = [cols, ...filtered.map(e => [
+    e.kategori, e.cabang, e.kategori_peserta, e.nama, e.kelas,
+    e.madrasah, e.kabupaten, e.pembina_nama, e.pembina_wa, e.status, e.id_daftar
+  ])];
+  const csv = rows.map(row => row.map(v => '"' + String(v ?? "").replace(/"/g,'""') + '"').join(",")).join("\r\n");
+  const blob = new Blob(["\ufeff" + csv], {type: "text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "data-peserta-porseni.csv";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+/* ====== Cetak ====== */
+$("#printBtn").addEventListener("click", () => {
+  if (allEntries.length === 0){ alert("Belum ada data untuk dicetak."); return; }
+  window.print();
+});
+
+/* ====== Kosongkan ====== */
+$("#clearBtn").addEventListener("click", () => {
+  if (!allEntries.length) return;
+  if (!confirm("Kosongkan semua data peserta dari tampilan? (File asli tidak terhapus)")) return;
+  allEntries = [];
+  meta = { files: 0, tanggal: null };
+  cardIndex = [];
+  $("#summary").innerHTML = "";
+  $("#container").innerHTML = `<div class="empty-state">Belum ada data. Silakan pilih file rekap JSON terlebih dahulu.</div>`;
+  $("#filterKategori").innerHTML = '<option value="">Semua kategori</option>';
+  $("#filterCabang").innerHTML = '<option value="">Semua cabang lomba</option>';
+});
+
+/* ====== Init ====== */
+$("#summary").innerHTML = `
+  <div class="summary-card"><strong>0</strong><span>Madrasah</span></div>
+  <div class="summary-card"><strong>0</strong><span>Peserta</span></div>
+  <div class="summary-card"><strong>0</strong><span>Cabang Lomba</span></div>
+  <div class="summary-card"><strong>0</strong><span>Kategori</span></div>
+  <div class="summary-card"><strong>0</strong><span>File Sumber</span></div>
+`;
+</script>
+</body>
+</html>

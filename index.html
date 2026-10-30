@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#126b45">
+  <title>PORSENI MTs | Portal Resmi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="#beranda" aria-label="PORSENI MTs Beranda">
+    <span class="brand-mark">🏆</span>
+    <span><b>PORSENI MTs</b><small>Sportivitas • Kreativitas • Prestasi</small></span>
+  </a>
+  <button class="menu-toggle" id="menuToggle" aria-label="Buka menu">☰</button>
+  <nav id="mainNav">
+    <a href="#beranda">Beranda</a><a href="#profil">Profil</a><a href="#informasi">Info</a>
+    <a href="#lomba">Daftar Lomba</a><a href="#statistik-pendaftaran">Statistik</a><a href="#galeri">Galeri</a><a class="nav-cta" href="pendaftaran.html">Formulir Pendaftaran ↗</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="beranda">
+    <div class="hero-content">
+      <span class="eyebrow">AJANG PRESTASI MADRASAH</span>
+      <h1>Berani Bertanding.<br><em>Siap Berprestasi.</em></h1>
+      <p>Wadah untuk mengembangkan bakat, kreativitas, sportivitas, dan persaudaraan antarmadrasah tsanawiyah.</p>
+      <div class="hero-actions"><a class="btn btn-light" href="#lomba">Jelajahi Lomba <span>↓</span></a><a class="btn btn-outline" href="pendaftaran.html">Daftar Peserta ↗</a></div>
+      <div class="hero-note"><span class="live-dot"></span> Portal informasi & pendaftaran PORSENI MTs</div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+      <div class="trophy">🏆</div><div class="art-tag tag-one">SPORTIF</div><div class="art-tag tag-two">BERPRESTASI</div>
+      <div class="art-star star-one">✦</div><div class="art-star star-two">✦</div>
+    </div>
+  </section>
+
+  <section class="stats section-wrap">
+    <div class="stat"><strong id="statLomba">—</strong><span>Cabang Lomba</span></div>
+    <div class="stat"><strong id="statKategori">—</strong><span>Kategori</span></div>
+    <div class="stat"><strong>MTs</strong><span>Jenjang Peserta</span></div>
+    <div class="stat"><strong>JSON</strong><span>Ekspor Pendaftaran</span></div>
+  </section>
+
+  <section class="section section-wrap" id="statistik-pendaftaran">
+    <div class="section-heading">
+      <div><span class="eyebrow dark">STATISTIK PENDAFTARAN</span><h2>Rekap peserta terdaftar</h2></div>
+      <p>Data otomatis diperbarui dari file <code>data/rekap.json</code> yang diekspor panitia. Hanya menampilkan jumlah, bukan data pribadi.</p>
+    </div>
+    <div id="statistikWrap"><div class="empty-state">Memuat data pendaftaran…</div></div>
+  </section>
+
+  <section class="section section-wrap" id="profil">
+    <div class="section-heading"><div><span class="eyebrow dark">TENTANG KEGIATAN</span><h2>Ajang bakat, prestasi, dan persaudaraan</h2></div><p id="profilRingkas">PORSENI menjadi ruang bagi peserta didik untuk menunjukkan kemampuan terbaiknya dengan menjunjung tinggi sportivitas.</p></div>
+    <div class="feature-grid">
+      <article class="feature-card"><span class="feature-icon green">🎯</span><h3>Tujuan</h3><p id="profilTujuan">Mengembangkan potensi peserta didik dalam bidang olahraga dan seni.</p></article>
+      <article class="feature-card"><span class="feature-icon gold">🤝</span><h3>Persaudaraan</h3><p>Membangun silaturahmi dan semangat kebersamaan antarmadrasah.</p></article>
+      <article class="feature-card"><span class="feature-icon purple">🌟</span><h3>Karakter</h3><p>Menumbuhkan disiplin, percaya diri, kreativitas, dan sikap sportif.</p></article>
+    </div>
+  </section>
+
+  <section class="section tint" id="informasi">
+    <div class="section-wrap">
+      <div class="section-heading"><div><span class="eyebrow dark">KABAR TERBARU</span><h2>Informasi penting</h2></div><p>Periksa informasi dan persyaratan sebelum mendaftarkan peserta.</p></div>
+      <div id="infoList" class="info-grid"><div class="empty-state">Memuat informasi…</div></div>
+    </div>
+  </section>
+
+  <section class="section section-wrap" id="lomba">
+    <div class="section-heading"><div><span class="eyebrow dark">PILIH KATEGORI</span><h2>Cabang perlombaan</h2></div><a class="text-link" href="pendaftaran.html">Buka formulir pendaftaran ↗</a></div>
+    <div class="filter-row"><input id="searchLomba" type="search" placeholder="Cari nama lomba…" aria-label="Cari lomba"><select id="filterKategori" aria-label="Filter kategori"><option value="">Semua kategori</option></select></div>
+    <div id="lombaGrid" class="competition-grid"><div class="empty-state">Memuat daftar lomba…</div></div>
+    <p class="small-note">Daftar lomba contoh dapat diubah melalui file <code>data/lomba.json</code>.</p>
+  </section>
+
+  <section class="section gallery-section" id="galeri">
+    <div class="section-wrap gallery-inner"><div><span class="eyebrow">MOMEN PORSENI</span><h2>Semangat dalam setiap langkah.</h2><p>Galeri dokumentasi kegiatan dapat ditambahkan oleh panitia pada pengembangan berikutnya.</p></div><div class="gallery-tiles"><div class="gallery-tile tile-a">🏃<span>Sportivitas</span></div><div class="gallery-tile tile-b">🎨<span>Kreativitas</span></div><div class="gallery-tile tile-c">🥇<span>Prestasi</span></div></div></div>
+  </section>
+
+  <section class="cta-section section-wrap"><div><span class="eyebrow">SIAP BERPARTISIPASI?</span><h2>Waktunya menunjukkan potensi terbaik!</h2><p>Isi formulir pendaftaran dan simpan berkas JSON untuk diserahkan kepada panitia.</p></div><a class="btn btn-green" href="pendaftaran.html">Mulai Pendaftaran ↗</a></section>
+</main>
+<footer class="site-footer"><div class="brand footer-brand"><span class="brand-mark">🏆</span><span><b>PORSENI MTs</b><small>Sportivitas • Kreativitas • Prestasi</small></span></div><p>© <span id="year"></span> Panitia PORSENI MTs. Sesuaikan identitas kegiatan pada file JSON.</p></footer>
+<script src="app.js"></script>
+</body>
+</html>
