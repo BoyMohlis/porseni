@@ -1,0 +1,85 @@
+{
+  "lomba": [
+    {
+      "id": "LOMBA-001",
+      "nama": "Pidato Bahasa Indonesia",
+      "kategori": "Seni",
+      "jenis": "Perorangan",
+      "kategoriPeserta": "Putra/Putri",
+      "ikon": "🎤",
+      "deskripsi": "Unjuk kemampuan berpidato dengan bahasa yang baik, percaya diri, dan isi yang inspiratif."
+    },
+    {
+      "id": "LOMBA-002",
+      "nama": "Pidato Bahasa Arab",
+      "kategori": "Seni",
+      "jenis": "Perorangan",
+      "kategoriPeserta": "Putra/Putri",
+      "ikon": "🗣️",
+      "deskripsi": "Lomba pidato bahasa Arab sesuai tema dan ketentuan panitia."
+    },
+    {
+      "id": "LOMBA-003",
+      "nama": "Kaligrafi",
+      "kategori": "Seni",
+      "jenis": "Perorangan",
+      "kategoriPeserta": "Putra/Putri",
+      "ikon": "🖌️",
+      "deskripsi": "Menampilkan karya kaligrafi sesuai bahan, waktu, dan aturan yang ditetapkan."
+    },
+    {
+      "id": "LOMBA-004",
+      "nama": "MTQ",
+      "kategori": "Seni",
+      "jenis": "Perorangan",
+      "kategoriPeserta": "Putra/Putri",
+      "ikon": "📖",
+      "deskripsi": "Menampilkan kemampuan membaca Al-Qur'an sesuai ketentuan lomba."
+    },
+    {
+      "id": "LOMBA-005",
+      "nama": "Cerdas Cermat",
+      "kategori": "Akademik",
+      "jenis": "Beregu",
+      "kategoriPeserta": "Terbuka",
+      "ikon": "🧠",
+      "deskripsi": "Uji pengetahuan, ketepatan, dan kerja sama tim."
+    },
+    {
+      "id": "LOMBA-006",
+      "nama": "Futsal",
+      "kategori": "Olahraga",
+      "jenis": "Beregu",
+      "kategoriPeserta": "Putra",
+      "ikon": "⚽",
+      "deskripsi": "Pertandingan futsal antarmadrasah sesuai peraturan dan jadwal panitia."
+    },
+    {
+      "id": "LOMBA-007",
+      "nama": "Bola Voli",
+      "kategori": "Olahraga",
+      "jenis": "Beregu",
+      "kategoriPeserta": "Putra/Putri",
+      "ikon": "🏐",
+      "deskripsi": "Kompetisi bola voli yang mengutamakan teknik, kerja sama, dan sportivitas."
+    },
+    {
+      "id": "LOMBA-008",
+      "nama": "Lari Sprint",
+      "kategori": "Olahraga",
+      "jenis": "Perorangan",
+      "kategoriPeserta": "Putra/Putri",
+      "ikon": "🏃",
+      "deskripsi": "Uji kecepatan lari sesuai nomor dan jarak yang ditetapkan panitia."
+    },
+    {
+      "id": "LOMBA-009",
+      "nama": "Tartil Al-Qur'an",
+      "kategori": "Seni",
+      "jenis": "Perorangan",
+      "kategoriPeserta": "Putra/Putri",
+      "ikon": "🌙",
+      "deskripsi": "Lomba membaca Al-Qur'an dengan tartil sesuai kriteria penilaian."
+    }
+  ]
+}

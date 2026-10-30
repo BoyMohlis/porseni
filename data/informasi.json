@@ -1,0 +1,19 @@
+{
+  "informasi": [
+    {
+      "tanggal": "PENGUMUMAN",
+      "judul": "Periksa petunjuk teknis lomba",
+      "isi": "Panitia dapat menambahkan ketentuan peserta, durasi, kriteria penilaian, dan dokumen persyaratan pada data informasi."
+    },
+    {
+      "tanggal": "PENDAFTARAN",
+      "judul": "Pendaftaran mode offline",
+      "isi": "Isi formulir, ekspor file JSON, lalu serahkan berkas tersebut kepada panitia sesuai petunjuk yang berlaku."
+    },
+    {
+      "tanggal": "PERSIAPAN",
+      "judul": "Pastikan data peserta benar",
+      "isi": "Periksa ejaan nama, kelas, cabang lomba, serta nomor WhatsApp pembina sebelum mengirimkan berkas."
+    }
+  ]
+}

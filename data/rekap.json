@@ -1,0 +1,48 @@
+{
+  "format": "porseni-mts-public-rekap-v1",
+  "tanggal_ekspor": "2026-10-30T00:10:32.117Z",
+  "ringkasan": {
+    "jumlah_lembaga": 1,
+    "jumlah_pendaftaran_lomba": 2,
+    "jumlah_peserta": 3,
+    "jumlah_cabang_lomba": 2
+  },
+  "per_kategori_lomba": [
+    {
+      "kategori": "Seni",
+      "jumlah_peserta": 2,
+      "jumlah_pendaftaran": 1
+    },
+    {
+      "kategori": "Olahraga",
+      "jumlah_peserta": 1,
+      "jumlah_pendaftaran": 1
+    }
+  ],
+  "per_kategori_peserta": [
+    {
+      "kategori": "Putri",
+      "jumlah_peserta": 2
+    },
+    {
+      "kategori": "Putra",
+      "jumlah_peserta": 1
+    }
+  ],
+  "per_cabang_lomba": [
+    {
+      "id": "LOMBA-001",
+      "nama": "Pidato Bahasa Indonesia",
+      "kategori": "Seni",
+      "jumlah_peserta": 2,
+      "jumlah_lembaga": 1
+    },
+    {
+      "id": "LOMBA-008",
+      "nama": "Lari Sprint",
+      "kategori": "Olahraga",
+      "jumlah_peserta": 1,
+      "jumlah_lembaga": 1
+    }
+  ]
+}
