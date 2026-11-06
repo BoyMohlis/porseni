@@ -2,15 +2,24 @@
   "lomba": [
     {
       "id": "LOMBA-001",
-      "nama": "Pidato Bahasa Indonesia",
+      "nama": "SINGER",
       "kategori": "Seni",
       "jenis": "Perorangan",
       "kategoriPeserta": "Putra/Putri",
       "ikon": "🎤",
-      "deskripsi": "Unjuk kemampuan berpidato dengan bahasa yang baik, percaya diri, dan isi yang inspiratif."
+      "deskripsi": "Unjuk kemampuan bernyanyi dengan bahasa yang baik, percaya diri, dan isi sesuai tema yang di tentukan panitia."
     },
     {
       "id": "LOMBA-002",
+      "nama": "Pidato Bahasa Indonesia",
+      "kategori": "Seni",
+      "jenis": "Perorangan",
+      "kategoriPeserta": "Putra/Putri",
+      "ikon": "🗣️",
+      "deskripsi": "Unjuk kemampuan berpidato dengan bahasa yang baik, percaya diri, dan isi yang inspiratif."
+    },
+    {
+      "id": "LOMBA-003",
       "nama": "Pidato Bahasa Arab",
       "kategori": "Seni",
       "jenis": "Perorangan",
@@ -19,8 +28,17 @@
       "deskripsi": "Lomba pidato bahasa Arab sesuai tema dan ketentuan panitia."
     },
     {
-      "id": "LOMBA-003",
-      "nama": "Kaligrafi",
+      "id": "LOMBA-004",
+      "nama": "Pidato Bahasa Inggris",
+      "kategori": "Seni",
+      "jenis": "Perorangan",
+      "kategoriPeserta": "Putra/Putri",
+      "ikon": "🗣️",
+      "deskripsi": "Lomba pidato bahasa Inggris sesuai tema dan ketentuan panitia."
+    },
+    {
+      "id": "LOMBA-005",
+      "nama": "Kaligrafi Kontemporer",
       "kategori": "Seni",
       "jenis": "Perorangan",
       "kategoriPeserta": "Putra/Putri",
@@ -28,7 +46,7 @@
       "deskripsi": "Menampilkan karya kaligrafi sesuai bahan, waktu, dan aturan yang ditetapkan."
     },
     {
-      "id": "LOMBA-004",
+      "id": "LOMBA-006",
       "nama": "MTQ",
       "kategori": "Seni",
       "jenis": "Perorangan",
@@ -37,35 +55,26 @@
       "deskripsi": "Menampilkan kemampuan membaca Al-Qur'an sesuai ketentuan lomba."
     },
     {
-      "id": "LOMBA-005",
-      "nama": "Cerdas Cermat",
-      "kategori": "Akademik",
-      "jenis": "Beregu",
-      "kategoriPeserta": "Terbuka",
-      "ikon": "🧠",
-      "deskripsi": "Uji pengetahuan, ketepatan, dan kerja sama tim."
-    },
-    {
-      "id": "LOMBA-006",
-      "nama": "Futsal",
-      "kategori": "Olahraga",
-      "jenis": "Beregu",
-      "kategoriPeserta": "Putra",
-      "ikon": "⚽",
-      "deskripsi": "Pertandingan futsal antarmadrasah sesuai peraturan dan jadwal panitia."
-    },
-    {
       "id": "LOMBA-007",
-      "nama": "Bola Voli",
-      "kategori": "Olahraga",
-      "jenis": "Beregu",
+      "nama": "TAHFIDZ",
+      "kategori": "Akademik",
+      "jenis": "Perorangan",
       "kategoriPeserta": "Putra/Putri",
-      "ikon": "🏐",
-      "deskripsi": "Kompetisi bola voli yang mengutamakan teknik, kerja sama, dan sportivitas."
+      "ikon": "🧠",
+      "deskripsi": "Uji kemampuan menghafal, ketepatan, dan keindahan bacaan."
     },
     {
       "id": "LOMBA-008",
-      "nama": "Lari Sprint",
+      "nama": "Film Pendek",
+      "kategori": "Seni",
+      "jenis": "Beregu",
+      "kategoriPeserta": "Putra/Putri",
+      "ikon": "🎬",
+      "deskripsi": "Uji kemampuan membuat ide konten, kreatifitas, dan kemampuan menggunakan Teknologi Digital."
+    },
+    {
+      "id": "LOMBA-009",
+      "nama": "Lari 100/400 M",
       "kategori": "Olahraga",
       "jenis": "Perorangan",
       "kategoriPeserta": "Putra/Putri",
@@ -73,13 +82,40 @@
       "deskripsi": "Uji kecepatan lari sesuai nomor dan jarak yang ditetapkan panitia."
     },
     {
-      "id": "LOMBA-009",
-      "nama": "Tartil Al-Qur'an",
+      "id": "LOMBA-010",
+      "nama": "CATUR",
+      "kategori": "Olahraga",
+      "jenis": "Perorangan",
+      "kategoriPeserta": "Putra/Putri",
+      "ikon": "♟",
+      "deskripsi": "Kompetisi Catur yang mengutamakan teknik berfikir, konsentrasi dan ketelitian"
+    },
+    {
+      "id": "LOMBA-011",
+      "nama": "Tenis Meja",
+      "kategori": "Olahraga",
+      "jenis": "Perorangan",
+      "kategoriPeserta": "Putra/Putri",
+      "ikon": "🏓",
+      "deskripsi": "Uji kemahiran tangan pemain dan stamina."
+    },
+    {
+      "id": "LOMBA-012",
+      "nama": "Bulu Tangkis",
+      "kategori": "Olahraga",
+      "jenis": "Perorangan",
+      "kategoriPeserta": "Putra/Putri",
+      "ikon": "🏸",
+      "deskripsi": "Uji kemahiran teknik pemain dan stamina."
+    },
+    {
+      "id": "LOMBA-013",
+      "nama": "Seni Pencak Silat",
       "kategori": "Seni",
       "jenis": "Perorangan",
       "kategoriPeserta": "Putra/Putri",
-      "ikon": "🌙",
-      "deskripsi": "Lomba membaca Al-Qur'an dengan tartil sesuai kriteria penilaian."
+      "ikon": "🥋",
+      "deskripsi": "Uji kemahiran teknik pemain, gerakan dan stamina."
     }
   ]
 }
